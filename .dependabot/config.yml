@@ -1,7 +1,8 @@
 version: 1
 update_configs:
-  directory: "/"
-  update_schedule: "daily"
-  automerged_updates:
-    - match:
-        dependency_name: "*"
+  - package_manager: java:gradle
+    directory: "/"
+    update_schedule: "daily"
+    automerged_updates:
+      - match:
+          dependency_name: "*"

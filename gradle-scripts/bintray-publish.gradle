@@ -5,7 +5,7 @@ bintray {
     publications = ['Production']
     pkg {
         repo = 'maven'
-        userOrg = bintray.user
+        userOrg = 'heshammassoud'
         name = rootProject.name
         desc = rootProject.description
         licenses = ['Apache-2.0']

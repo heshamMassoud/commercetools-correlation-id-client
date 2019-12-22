@@ -4,6 +4,8 @@ on:
   push:
     tags: # Should not trigger for tagged commits.
       - '!*'
+    branches: # Should trigger for any branch.
+      - '*'
 
 jobs:
   static_code_analysis:

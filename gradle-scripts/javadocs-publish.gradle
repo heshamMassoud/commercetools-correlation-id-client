@@ -1,0 +1,61 @@
+gitPublish {
+    // NOTE:
+    // 1) $GRGIT_USER environment variable must be set to actual github token
+    //    see http://ajoberstar.org/grgit/docs/groovydoc/index.html?org/ajoberstar/grgit/auth/AuthConfig.html
+    //    https://github.com/ajoberstar/grgit#usage
+    // 2) to use GH token `repoUri` must have an https (not git or ssh) protocol
+
+    branch = 'gh-pages'
+    // Copies the output of the 'javadoc' task into the path value passed to the 'into' method.
+    // More about it:
+    // https://docs.gradle.org/current/javadoc/org/gradle/api/file/CopySpec.html#from-java.lang.Object-groovy.lang.Closure-
+    // https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html#files-java.lang.Object...-
+    contents {
+        from (javadoc) {
+            into "v/$rootProject.version"
+        }
+    }
+
+    // what to keep in the existing branch (include=keep)
+    preserve {
+        include 'v/**', 'benchmarks/**', 'doc/**'
+        exclude 'v/test**', 'doc/test**', 'v/development-SNAPSHOT', 'doc/development-SNAPSHOT' // always remove documentation of test releases
+    }
+
+    // message used when committing changes
+    // The .toString() is temporarily used for this issue: https://github.com/ajoberstar/gradle-git-publish/issues/50
+    commitMessage = "Publish a new java doc for $rootProject.version version.".toString()
+}
+
+gitPublishReset {
+    doFirst {
+        /* try to find github publish token in the next order:
+             1) -Dorg.ajoberstar.grgit.auth.username
+             2) $GRGIT_USER
+             3) $GH_TOKEN
+         interrupt the task if neither of them is set.
+        */
+
+        final authProperty = 'org.ajoberstar.grgit.auth.username'
+        if (!System.getProperty(authProperty)?.trim()) {
+            def githubToken =
+                    System.getProperty(authProperty) ?:
+                            (project.hasProperty(authProperty) ? project.property(authProperty) :
+                                    (System.getenv('GRGIT_USER') ?:
+                                            System.getenv('GH_TOKEN')))
+
+            if (!githubToken?.trim()) {
+                throw new InvalidUserDataException("Unable to authorise git publish. To authorise, please" +
+                        " make sure one of the following is set:\n" +
+                        "1. GRGIT_USER environment variable.\n" +
+                        "2. GH_TOKEN environment variable.\n" +
+                        "3. -D$authProperty Java runtime property is set.\n" +
+                        "4. $authProperty in gradle.properties file.")
+            }
+
+            System.setProperty(authProperty, githubToken)
+        }
+
+        validateVersion('Documentation publishing could be performed only with a valid release version')
+    }
+}

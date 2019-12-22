@@ -1,0 +1,6 @@
+group = 'com.heshammassoud'
+version = System.getProperty('build.version') ?: devVersion
+description = "Java Library used to attach any correlation id value as the header 'X_CORRELATION_ID' to any" +
+        "commercetools-jvm-sdk SphereRequest."
+
+logger.lifecycle("\nActual Build Version: [{}]\n", version)

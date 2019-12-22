@@ -8,7 +8,7 @@ import io.sphere.sdk.http.HttpHeaders;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class Request<T> extends SphereRequestDecorator<T> {
+public final class Request<T> extends SphereRequestDecorator<T> {
 
     private final String correlationId;
 
@@ -18,14 +18,16 @@ public class Request<T> extends SphereRequestDecorator<T> {
     }
 
     /**
-     * Decorates a {@link SphereRequest} with this {@link Request}. The main function of decoration is in the
+     * Decorates a {@link Request} with a {@link SphereRequest} as delegate. The main function of decoration is in the
      * {@link Request#httpRequestIntent()} which stores the supplied {@code correlationId} as a header in the request
      * with the key {@value HttpHeaders#X_CORRELATION_ID}.
      *
      * @param delegate the delegate {@link SphereRequest} to be decorated.
      * @param correlationId the correlation id to store in the header of the decorated request.
      * @param <T> the type of the resource resulting from performing the request on the commercetools platform.
-     * @return
+     * @return  a {@link Request} with a {@link SphereRequest} as delegate. The main function of decoration is in the
+     *          {@link Request#httpRequestIntent()} which stores the supplied {@code correlationId} as a header in the
+     *          request with the key {@value HttpHeaders#X_CORRELATION_ID}.
      */
     public static <T> Request<T> of(@Nonnull final SphereRequest<T> delegate, @Nonnull final String correlationId) {
         return new Request<>(delegate, correlationId);
@@ -38,7 +40,7 @@ public class Request<T> extends SphereRequestDecorator<T> {
     }
 
     @Override
-    public boolean equals(Object otherRequest) {
+    public boolean equals(final Object otherRequest) {
         if (this == otherRequest) {
             return true;
         }

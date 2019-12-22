@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RequestTest {
 
     @Test
-    void of_WithRandomUUIDCorrelationId_ShouldBeStoredInRequestHeader() {
+    void of_WithRandomUuidCorrelationId_ShouldBeStoredInRequestHeader() {
         // preparation
         final String correlationId = UUID.randomUUID().toString();
         // test
@@ -21,15 +21,5 @@ class RequestTest {
         // assertion
         assertThat(request.httpRequestIntent().getHeaders())
             .isEqualTo(HttpHeaders.of(HttpHeaders.X_CORRELATION_ID, correlationId));
-    }
-
-    @Test
-    void httpRequestIntent() {
-        // TODO
-    }
-
-    @Test
-    void equals() {
-        // TODO
     }
 }

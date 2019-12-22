@@ -36,5 +36,5 @@ jobs:
 
       - name: Unit Tests and Coverage
         run: |
-          ./gradlew clean setLibraryVersion test jacocoTestCoverageVerification jacocoTestReport
+          ./gradlew clean test jacocoTestCoverageVerification jacocoTestReport
           curl -s https://codecov.io/bash | bash -s -- -t ${{secrets.CODECOV_TOKEN}}

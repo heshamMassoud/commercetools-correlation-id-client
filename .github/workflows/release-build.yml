@@ -27,7 +27,7 @@ jobs:
         run: ./gradlew findbugsMain findbugsTest
 
   testing:
-    name: Unit Tests and Coverage
+    name: Test and upload to Bintray
     runs-on: ubuntu-latest
     steps:
       - name: Git Checkout

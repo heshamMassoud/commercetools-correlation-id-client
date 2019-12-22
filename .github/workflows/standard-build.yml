@@ -1,0 +1,38 @@
+name: Standard Build
+
+on:
+  push:
+    tags: # Should not trigger for tagged commits.
+      - '!*'
+
+jobs:
+  static_code_analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v1
+
+      - name: Generate Dependency Updates Report
+        run: ./gradlew clean dependencyUpdates
+
+      - name: Checkstyle
+        run: ./gradlew checkstyleMain checkstyleTest
+
+      - name: PMD
+        run: ./gradlew pmdMain pmdTest
+
+      - name: FindBugs
+        run: ./gradlew findbugsMain findbugsTest
+
+  testing:
+    name: Unit Tests and Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v1
+
+      - name: Unit Tests and Coverage
+        run: |
+          ./gradlew clean setLibraryVersion test jacocoTestCoverageVerification jacocoTestReport
+          curl -s https://codecov.io/bash | bash -s -- -t ${{secrets.CODECOV_TOKEN}}

@@ -1,0 +1,46 @@
+name: Release Build
+
+on:
+  push:
+    tags: # Trigger for any tagged commit.
+      - '*'
+
+jobs:
+
+  static_code_analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v1
+
+      - name: Generate Dependency Updates Report
+        run: ./gradlew clean dependencyUpdates
+
+      - name: Checkstyle
+        run: ./gradlew checkstyleMain checkstyleTest
+
+      - name: PMD
+        run: ./gradlew pmdMain pmdTest
+
+      - name: FindBugs
+        run: ./gradlew findbugsMain findbugsTest
+
+  testing:
+    name: Unit Tests and Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v1
+
+      - name: Unit Tests and Coverage
+        run: |
+          ./gradlew clean setLibraryVersion test jacocoTestCoverageVerification jacocoTestReport
+          curl -s https://codecov.io/bash | bash -s -- -t ${{secrets.CODECOV_TOKEN}}
+
+      - name: Upload Artifacts to Bintray
+        if: success() # only when previous step succeeds
+        run: ./gradlew --info -Dbuild.version="${{ GITHUB_REF }}" bintrayUpload
+        env:
+          BINTRAY_USER: commercetools
+          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}

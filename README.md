@@ -14,7 +14,7 @@ commercetools-jvm-sdk SphereRequest.
 ```
 #### Gradle
 ```groovy
-compile 'com.heshammassoud:commercetools-correlation-id-decorator:0.1.0'
+implementation 'com.heshammassoud:commercetools-correlation-id-decorator:0.1.0'
 ```
 
 ### Usage

@@ -42,5 +42,5 @@ jobs:
         if: success() # only when previous step succeeds
         run: ./gradlew --info -Dbuild.version="${GITHUB_REF##*/}" bintrayUpload
         env:
-          BINTRAY_USER: hesham-massoud
+          BINTRAY_USER: heshammassoud
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}

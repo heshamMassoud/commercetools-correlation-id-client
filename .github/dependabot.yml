@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.commercetools.sdk.jvm.core:commercetools-java-client
+    versions:
+    - 1.56.0
+    - 1.59.0
+    - 1.60.0
+    - 1.61.0
+  - dependency-name: com.commercetools.sdk.jvm.core:commercetools-models
+    versions:
+    - 1.56.0
+    - 1.59.0
+    - 1.60.0
+    - 1.61.0
+  - dependency-name: org.mockito:mockito-core
+    versions:
+    - 3.7.7
+    - 3.8.0
+  - dependency-name: com.github.ben-manes.versions
+    versions:
+    - 0.36.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-params
+    versions:
+    - 5.7.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-api
+    versions:
+    - 5.7.0
+  - dependency-name: org.junit.jupiter:junit-jupiter-engine
+    versions:
+    - 5.7.0
